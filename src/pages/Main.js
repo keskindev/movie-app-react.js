@@ -34,20 +34,19 @@ const Main = () => {
 
   return (
     <>
-      {currentUser ? (
-        <form className="search" onSubmit={handleSubmit}>
-          <input
-            type="search"
-            className="search-input"
-            placeholder="Search a movie..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <button className="ms-2" type="submit">
-            Search
-          </button>
-        </form>
-      ) : null}
+      <form className="search" onSubmit={handleSubmit}>
+        <input
+          type="search"
+          className="search-input"
+          placeholder="Search a movie..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <button className="ms-2" type="submit">
+          Search
+        </button>
+      </form>
+
       <div className="movie-container">
         {movies.map((movie) => (
           <MovieCard key={movie.id} {...movie} />
