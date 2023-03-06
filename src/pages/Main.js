@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import MovieCard from "../components/MovieCard";
+import { AuthContext } from "../context/AuthContext";
 
 const FEATURED_API =
   "https://api.themoviedb.org/3/discover/movie?api_key=d6278b3dc3e6f8f8376a89851c3f8c8f";
@@ -9,6 +10,7 @@ const SEARCH_API =
 const Main = () => {
   const [movies, setMovies] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
     getMovies(FEATURED_API);
@@ -22,26 +24,30 @@ const Main = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (searchTerm) {
+    if (searchTerm && currentUser) {
       getMovies(SEARCH_API + searchTerm);
+    } else {
+      alert("Please login to seacrh a movie.");
     }
     setSearchTerm("");
   };
 
   return (
     <>
-      <form className="search" onSubmit={handleSubmit}>
-        <input
-          type="search"
-          className="search-input"
-          placeholder="Search a movie..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <button className="ms-2" type="submit">
-          Search
-        </button>
-      </form>
+      {currentUser ? (
+        <form className="search" onSubmit={handleSubmit}>
+          <input
+            type="search"
+            className="search-input"
+            placeholder="Search a movie..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <button className="ms-2" type="submit">
+            Search
+          </button>
+        </form>
+      ) : null}
       <div className="movie-container">
         {movies.map((movie) => (
           <MovieCard key={movie.id} {...movie} />
